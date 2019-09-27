@@ -278,7 +278,37 @@ public class ProblemGrid {
     }
 
     public double computeBeliefStateForSingleState(int[] stateCoordinates, Stack<Observation> observations, Stack<String> actions) {
-        double num = 0;
-        return 0;
+
+        double alpha = 1; // figure this out later
+        double sum = 0; // idk if the sum resets every time we recurse or not
+        Observation lastObservation = observations.pop();
+        String lastAction = actions.pop();
+
+        Set<int[]> possiblePrevStates = new HashSet<>();
+        int[] rightNeighbor = getState(stateCoordinates).getRightNeighbor();
+        int[] leftNeighbor = getState(stateCoordinates).getLeftNeighbor();
+        int[] upNeighbor = getState(stateCoordinates).getUpNeighbor();
+        int[] downNeighbor = getState(stateCoordinates).getDownNeighbor();
+
+        possiblePrevStates.add(stateCoordinates);
+        if (rightNeighbor != null) {
+            possiblePrevStates.add(rightNeighbor);
+        }
+        if (leftNeighbor != null) {
+            possiblePrevStates.add(leftNeighbor);
+        }
+        if (upNeighbor != null) {
+            possiblePrevStates.add(upNeighbor);
+        }
+        if (downNeighbor != null) {
+            possiblePrevStates.add(downNeighbor);
+        }
+
+        double probObservationGivenState = getProbOfObservationGivenState(observations.pop(), stateCoordinates);
+
+        for (int[] prev : possiblePrevStates) {
+            sum = sum + getTransitionProbability(prev, stateCoordinates, lastAction) * computeBeliefStateForSingleState(prev, observations, actions);
+        }
+        return alpha* probObservationGivenState * sum;
     }
 }
