@@ -1,30 +1,20 @@
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
-import java.util.Vector;
+import java.util.*;
 
 public class Main {
 
 
     public static void main(String[] args) {
-	// TODO
         ProblemGrid problemGrid = new ProblemGrid();
-        Set<State> states = problemGrid.getStates();
-        List<Double> unNormalizedBeliefState = new ArrayList<Double>();
-        for (State s : states) {
-            double result = problemGrid.computeBeliefStateForSingleState(s.getCoordinates(), problemGrid.getObservations(), problemGrid.getActions());
-            // System.out.println("b(" + s.getCoordinates()+ ")" + " = " + result);
-            unNormalizedBeliefState.add(result);
-        }
-        double sum = 0;
-        for (Double d : unNormalizedBeliefState) {
-            sum = sum + d;
-        }
-        double alpha = 1/sum;
-
-        List<Double> normalizedBeliefState = new ArrayList<>();
-        for (Double d : unNormalizedBeliefState) {
-            normalizedBeliefState.add(d*alpha);
-        }
+        // example 1
+        Stack<Observation> ex1Observations = new Stack<Observation>();
+        ex1Observations.push(Observation.TWO_WALLS);
+        ex1Observations.push(Observation.TWO_WALLS);
+        ex1Observations.push(Observation.TWO_WALLS);
+        Stack<String> ex1Actions = new Stack<>();
+        ex1Actions.push("up");
+        ex1Actions.push("up");
+        ex1Actions.push("up");
+        ArrayList<Double> ex1Result = problemGrid.computeBeliefState(new double[] {1/11, 1/11, 1/11, 1/11, 1/11, 1/11, 1/11, 1/11, 1/11, 1/11, 1/11}, ex1Observations, ex1Actions, 0);
+        System.out.println(ex1Result);
     }
 }
