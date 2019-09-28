@@ -151,9 +151,11 @@ public class ProblemGrid {
     public double getTransitionProbability(int[] prevState, int[] curState, String action) {
         double prob = 0;
 
-        if (doCoordinatesBelongToTerminal(prevState)) { // if prevState is terminal, cannot exit to non-terminal state
-            if (!doCoordinatesBelongToTerminal(curState)) {
+        if (doCoordinatesBelongToTerminal(prevState)) { // if prevState is terminal, cannot exit to any other state
+            if (!Arrays.equals(prevState, curState)) {
                 prob = 0;
+            } else if (Arrays.equals(prevState, curState)) { // if you stay in the same terminal state
+                prob = 1;
             }
         } else if (action.equals("right")) {
             if (isRightNeighborOf(curState, prevState)) {
@@ -304,7 +306,7 @@ public class ProblemGrid {
             possiblePrevStates.add(downNeighbor);
         }
 
-        double probObservationGivenState = getProbOfObservationGivenState(observations.pop(), stateCoordinates);
+        double probObservationGivenState = getProbOfObservationGivenState(lastObservation, stateCoordinates);
 
         for (int[] prev : possiblePrevStates) {
             sum = sum + getTransitionProbability(prev, stateCoordinates, lastAction) * computeBeliefStateForSingleState(prev, observations, actions);
