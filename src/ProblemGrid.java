@@ -249,15 +249,15 @@ public class ProblemGrid {
         return null;
     }
 
-    // computes the belief state 
+    // computes the belief state
     public ArrayList<Double> computeBeliefState(double[] initBeliefState, Stack<Observation> observations, Stack<String> actions, double curResult) {
         ArrayList<Double> unNormalizedBeliefState = new ArrayList<>();
         ArrayList<Double> normalizedBeliefState = new ArrayList<>();
 
         if (!actions.empty() && !observations.empty()) {
+            Observation lastObservation = observations.pop();
+            String lastAction = actions.pop();
             for (State s : states) {
-                Observation lastObservation = observations.pop();
-                String lastAction = actions.pop();
                 int[] stateCoordinates = s.getCoordinates();
 
                 Set<int[]> possiblePrevStates = new HashSet<>();
